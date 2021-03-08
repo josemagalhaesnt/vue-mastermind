@@ -1,20 +1,20 @@
 <template>
-  <div class="ColorSelect">
-    <select
-      name="colors"
-      id="colors"
-      v-model="selectedColor"
-      @change="selectColor"
-    >
-      <option
-        class="color"
-        :key="color.id"
-        v-for="color in colors"
-        :value="color"
+  <div class="ColorSelect control has-icons-left">
+    <div class="select is-rounded is-medium">
+      <select
+        name="colors"
+        id="colors"
+        v-model="selectedColor"
+        @change="selectColor"
       >
-        <span class="color__value">{{ color.name }}</span>
-      </option>
-    </select>
+        <option :key="color.id" v-for="color in colors" :value="color">
+          <span class="color__value">{{ color.name }}</span>
+        </option>
+      </select>
+    </div>
+    <div class="icon is-small is-left">
+      <i class="fas fa-fill-drip"></i>
+    </div>
   </div>
 </template>
 
@@ -43,9 +43,7 @@ export default {
 </script>
 
 <style>
-.color__indicator {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+.ColorSelect {
+  margin: 0 15px;
 }
 </style>

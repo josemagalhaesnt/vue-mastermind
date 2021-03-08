@@ -1,49 +1,52 @@
 <template>
   <section id="gaming-section">
     <header class="game-controls">
-      <div class="game-controls-bar">
-        <button
-          @click="generateColorPassword"
-          :disabled="colorPassword.length > 0"
-          class="button--confirm"
-        >
-          Start Game
-        </button>
-        <div class="game-control--round" v-bind="roundCounter">
+      <nav class="columns">
+        <div class="game-controls-bar column">
+          <button
+            @click="generateColorPassword"
+            :disabled="colorPassword.length > 0"
+            class="button is-primary"
+          >
+            Start Game
+          </button>
+        </div>
+        <div class="column" v-bind="roundCounter">
           Round: {{ roundCounter }}
         </div>
-        <div class="game-control--points" v-bind="roundPoints">
-          Points: {{ roundPoints }}
-        </div>
-      </div>
+        <div class="column" v-bind="roundPoints">Points: {{ roundPoints }}</div>
+      </nav>
     </header>
-    <div v-if="colorPassword.length > 0" class="game-input-area">
-      <ColorSelect :colors="colors" @color-select="onColorSelect" />
-      <ColorSelect :colors="colors" @color-select="onColorSelect" />
-      <ColorSelect :colors="colors" @color-select="onColorSelect" />
-      <ColorSelect :colors="colors" @color-select="onColorSelect" />
-      <button
-        type="submit"
-        @click="checkPassword(colorPasswordGuess)"
-        :disabled="rightAnswer"
-      >
-        Finish Round
-      </button>
+    <div class="columns">
+      <div v-if="colorPassword.length > 0" class="game-input-area column">
+        <ColorSelect :colors="colors" @color-select="onColorSelect" />
+        <ColorSelect :colors="colors" @color-select="onColorSelect" />
+        <ColorSelect :colors="colors" @color-select="onColorSelect" />
+        <ColorSelect :colors="colors" @color-select="onColorSelect" />
+        <button
+          type="submit"
+          @click="checkPassword(colorPasswordGuess)"
+          :disabled="rightAnswer"
+          class="button is-outlined"
+        >
+          Finish Round
+        </button>
+      </div>
+      <GameLogsSidebar v-if="roundStatus.length > 0" :logs="roundStatus" />
     </div>
-    <!-- <div v-show="roundStatus.length > 0">
-      <p v-for="status in roundStatus" v-bind="roundStatus">{{ status }}</p>
-    </div> -->
   </section>
 </template>
 
 <script>
 import colorConstants from "../constants/colorConstants";
 import ColorSelect from "./ColorSelect";
+import GameLogsSidebar from "./GameLogsSidebar";
 
 export default {
   name: "GamingSection",
   components: {
-    ColorSelect
+    ColorSelect,
+    GameLogsSidebar
   },
   data() {
     return {
@@ -53,7 +56,7 @@ export default {
       rightAnswer: false,
       roundCounter: 0,
       roundPoints: 0,
-      roundStatus: ""
+      roundStatus: []
     };
   },
   computed: {},
@@ -104,25 +107,38 @@ export default {
 
       if (passArray && passArray.length > 0 && !this.rightAnswer) {
         this.roundCounter++;
-        this.roundStatus = "";
         passArray.map((color, idx) => {
           const isSomewhereThere = that.colorPassword.includes(color);
           const isRightThere = that.colorPassword[idx].id === color.id;
+          let idGenerator =
+            "_" +
+            Math.random()
+              .toString(36)
+              .substr(2, 9);
           /* const isTheCorrectAnswer =
             that.rightAnswer && that.roundCounter <= 10; */
 
           if (isRightThere) {
             that.roundPoints++;
-            that.roundStatus += `${color.name} is at correct position `;
+            that.roundStatus.push({
+              id: idGenerator,
+              message: `${color.name} is at correct position `
+            });
           } else if (isSomewhereThere) {
-            that.roundStatus += `There is one or multiple occurences of ${color.name} `;
+            that.roundStatus.push({
+              id: idGenerator,
+              message: `There is one or multiple occurences of ${color.name} `
+            });
           } /*  else if (isTheCorrectAnswer) {
             that.roundStatus = "YOU ARE A WINNER, BABY!!!";
           } */ else {
-            that.roundStatus += `${color.name} is not there `;
+            that.roundStatus.push({
+              id: idGenerator,
+              message: `${color.name} is not there `
+            });
           }
         });
-        console.log(that.roundStatus);
+        // console.log(that.roundStatus);
         //const obj = Object.assign({}, that.colorPasswordGuess);
         return (that.colorPasswordGuess = []);
       } else {
@@ -153,26 +169,10 @@ button:disabled {
   color: white;
 }
 
-.gaming-section {
-  display: flex;
-  flex-direction: column;
-}
-
 .game-controls {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
   background-color: whitesmoke;
   color: #222;
-}
-
-.game-controls-bar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-
-  padding: 10px 5%;
+  padding: 10px 0;
 }
 
 .game-input-area {
