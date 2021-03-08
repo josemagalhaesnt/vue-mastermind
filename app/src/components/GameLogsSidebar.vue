@@ -4,9 +4,16 @@
       <p class="panel-heading">Game Logs</p>
       <div class="panel-block">
         <div class="content">
-          <p class="row" :key="log.id" v-bind="log" v-for="log in logs">
-            {{ log.message }}
-          </p>
+          <div
+            class="message is-link"
+            :key="log.id"
+            v-bind="log"
+            v-for="log in logs"
+          >
+            <div class="message-body">
+              <p>{{ log.message }}</p>
+            </div>
+          </div>
         </div>
       </div>
     </aside>
