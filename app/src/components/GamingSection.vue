@@ -1,22 +1,11 @@
 <template>
   <section id="gaming-section">
-    <header class="game-controls">
-      <nav class="columns">
-        <div class="game-controls-bar column">
-          <button
-            @click="generateColorPassword"
-            :disabled="colorPassword.length > 0"
-            class="button is-primary"
-          >
-            Start Game
-          </button>
-        </div>
-        <div class="column" v-bind="roundCounter">
-          Round: {{ roundCounter }}
-        </div>
-        <div class="column" v-bind="roundPoints">Points: {{ roundPoints }}</div>
-      </nav>
-    </header>
+    <GameHeader
+      :startIsDisabled="roundCounter > 0"
+      :generateColorPassword="generateColorPassword"
+      :roundCounter="roundCounter"
+      :roundPoints="roundPoints"
+    />
     <div class="columns">
       <div v-if="colorPassword.length > 0" class="game-input-area column">
         <ColorSelect :colors="colors" @color-select="onColorSelect" />
@@ -39,12 +28,14 @@
 
 <script>
 import colorConstants from "../constants/colorConstants";
+import GameHeader from "./GameHeader";
 import ColorSelect from "./ColorSelect";
 import GameLogsSidebar from "./GameLogsSidebar";
 
 export default {
   name: "GamingSection",
   components: {
+    GameHeader,
     ColorSelect,
     GameLogsSidebar
   },
@@ -157,22 +148,6 @@ button {
   border-radius: 5px;
   border: none;
   margin: 0 20px;
-}
-
-button:disabled {
-  cursor: block;
-  background-color: grey;
-}
-
-.button--confirm {
-  background-color: #32936f;
-  color: white;
-}
-
-.game-controls {
-  background-color: whitesmoke;
-  color: #222;
-  padding: 10px 0;
 }
 
 .game-input-area {
