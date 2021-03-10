@@ -1,21 +1,15 @@
 <template>
-  <div class="ColorSelect control has-icons-left">
-    <div class="select is-rounded is-medium">
-      <select
-        name="colors"
-        id="colors"
-        v-model="selectedColor"
-        @change="selectColor"
-      >
-        <option :key="color.id" v-for="color in colors" :value="color">
-          <span class="color__value">{{ color.name }}</span>
-        </option>
-      </select>
-    </div>
-    <div class="icon is-small is-left">
-      <i class="fas fa-fill-drip"></i>
-    </div>
-  </div>
+  <select
+    name="colors"
+    class="ColorSelect"
+    id="colors"
+    v-model="selectedColor"
+    @change="selectColor"
+  >
+    <option :key="color.colorId" v-for="color in colors" :value="color">
+      <span class="color__value">{{ color.name }}</span>
+    </option>
+  </select>
 </template>
 
 <script>
@@ -35,15 +29,11 @@ export default {
   },
   methods: {
     selectColor() {
-      this.$emit("color-select", this.selectedColor.id);
+      this.$emit("color-select", this.selectedColor.colorId);
       console.log("Your choice was: " + this.selectedColor.name);
     }
   }
 };
 </script>
 
-<style>
-.ColorSelect {
-  margin: 0 15px;
-}
-</style>
+<style></style>

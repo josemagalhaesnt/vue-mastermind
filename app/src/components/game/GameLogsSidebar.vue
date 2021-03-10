@@ -34,7 +34,7 @@ export default {
 
 <style>
 .GameLogsSidebar {
-  max-width: 50vw;
+  max-width: 25vw;
   height: 100%;
   margin: 50px 10px 0 10px;
   padding: 10px;

@@ -39,7 +39,7 @@
         <GameLogsSidebar v-if="roundStatus.length > 0" :logs="roundStatus" />
       </div>
       <GameRoundHistory
-        v-show="roundCounter > 1"
+        :v-show="roundCounter > 0"
         :roundCounter="roundCounter"
         :passwordGuess="colorPasswordGuess"
       />
