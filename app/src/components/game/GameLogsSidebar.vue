@@ -1,5 +1,5 @@
 <template>
-  <div class="GameLogsSidebar column is-right">
+  <div class="GameLogsSidebar column bg-is-primary is-right">
     <aside class="panel is-info">
       <p class="panel-heading">Game Logs</p>
       <div class="panel-block">
@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: "GameLogsSidebar",
+  name: 'GameLogsSidebar',
   props: {
     logs: {
       type: Array,
@@ -34,9 +34,8 @@ export default {
 
 <style>
 .GameLogsSidebar {
-  max-width: 25vw;
   height: 100%;
-  margin: 50px 10px 0 10px;
+  margin: 40px 10px 0 10px;
   padding: 10px;
 }
 </style>

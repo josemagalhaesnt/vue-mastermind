@@ -1,13 +1,13 @@
 <template>
-  <section id="gaming-section" class="container is-fullhd">
+  <section id="gaming-section" class="GamingSection container is-fullhd">
     <GameHeader
-      :startIsDisabled="roundCounter >= 2"
+      :startIsDisabled="roundCounter > 0 || colorPassword.length > 0"
       :generateColorPassword="generateColorPassword"
       :roundCounter="roundCounter"
       :roundPoints="roundPoints"
     />
-    <div class="columns">
-      <div class="column">
+    <div class="GamingSection__content columns">
+      <div class="column is-left">
         <main
           v-show="colorPassword && colorPassword.length > 0 && isAllowedToPlay"
           class="GameMain"
@@ -34,28 +34,36 @@
             Finish Round
           </button>
         </main>
+        <aside class="columns container">
+          <div
+            :key="gameRound.roundId"
+            v-for="gameRound in this.filterRounds()"
+            class="game-round"
+            v-show="this.filterRounds().length > 0"
+          >
+            <GameRoundHistory :gameRound="gameRound" />
+          </div>
+        </aside>
       </div>
-      <div class="column">
+      <div class="column is-one-quarter">
         <GameLogsSidebar v-if="roundStatus.length > 0" :logs="roundStatus" />
       </div>
-      <GameRoundHistory
-        :v-show="roundCounter > 0"
-        :roundCounter="roundCounter"
-        :passwordGuess="colorPasswordGuess"
-      />
     </div>
   </section>
 </template>
 
 <script>
-import colorConstants from "../constants/colorConstants";
-import GameHeader from "./game/GameHeader";
-import GameLogsSidebar from "./game/GameLogsSidebar";
-import ColorSelect from "./ColorSelect";
-import GameRoundHistory from "./game/GameRoundHistory";
+import {
+  colorConstants,
+  defaultSelectedColors
+} from '../constants/colorConstants';
+import GameHeader from './game/GameHeader';
+import GameLogsSidebar from './game/GameLogsSidebar';
+import ColorSelect from './ColorSelect';
+import GameRoundHistory from './game/GameRoundHistory';
 
 export default {
-  name: "GamingSection",
+  name: 'GamingSection',
   components: {
     GameHeader,
     GameLogsSidebar,
@@ -64,32 +72,38 @@ export default {
   },
   data() {
     return {
-      colors: colorConstants,
+      colors: this.colorOptions(colorConstants),
       colorPassword: [],
       colorPasswordGuess: [
         {
           id: 0,
-          color: "grey",
+          color: defaultSelectedColors[0],
           isCorrect: false
         },
         {
           id: 1,
-          color: "grey",
+          color: defaultSelectedColors[1],
           isCorrect: false
         },
         {
           id: 2,
-          color: "grey",
+          color: defaultSelectedColors[2],
           isCorrect: false
         },
         {
           id: 3,
-          color: "grey",
+          color: defaultSelectedColors[3],
           isCorrect: false
         }
       ],
       roundCounter: 0,
       roundPoints: 0,
+      gameRounds: [
+        {
+          roundId: 0,
+          selectedColors: defaultSelectedColors
+        }
+      ],
       roundStatus: [],
       isAllowedToPlay: true,
       rightAnswer: false
@@ -97,7 +111,6 @@ export default {
   },
   watch: {
     colorPasswordGuess() {
-      console.log(this.colorPasswordGuess);
       const isTheCorrectGuess =
         this.colorPasswordGuess[0].isCorrect &&
         this.colorPasswordGuess[1].isCorrect &&
@@ -110,7 +123,7 @@ export default {
         this.rightAnswer = true;
         this.roundStatus.push({
           id: this.idGenerator,
-          message: "YOU ARE A WINNER BABY!!!"
+          message: 'YOU ARE A WINNER BABY!!!'
         });
       } else {
         console.log("You ain't right yet, try again");
@@ -122,17 +135,25 @@ export default {
         this.roundCounter <= 10 &&
         !this.rightAnswer
       ) {
-        console.log(`Round is over`);
+        const auxArr = [...this.gameRounds];
+        auxArr.push({
+          roundId: this.roundCounter,
+          selectedColors: this.colorPasswordGuess
+        });
+        this.gameRounds = auxArr;
       } else if (this.roundCounter > 10) {
-        console.log("Game over!!!");
+        console.log('Game over!!!');
         this.isAllowedToPlay = false;
       }
     }
   },
   methods: {
+    colorOptions(colorsArr) {
+      return colorsArr.filter(color => color.colorId > 1);
+    },
     idGenerator() {
       const customId =
-        "_" +
+        '_' +
         Math.random()
           .toString(36)
           .substr(2, 9);
@@ -144,7 +165,8 @@ export default {
     generateColorPassword() {
       let password = [];
       for (let i = 0; i < 4; i++) {
-        const randomIndex = Math.floor(Math.random() * 3);
+        const randomNum = Math.floor(Math.random() * colorConstants.length);
+        const randomIndex = Math.max(2, randomNum);
         const auxColor = this.colors.find(
           color => color.colorId === randomIndex
         );
@@ -159,9 +181,9 @@ export default {
       );
 
       if (selectedColor !== undefined) {
-        console.log("Color selection confirmed!");
+        console.log('Color selection confirmed!');
       } else {
-        console.log("There was an error at confirming the selected color");
+        console.log('There was an error at confirming the selected color');
       }
       return selectedColor.name;
     },
@@ -171,7 +193,6 @@ export default {
           const isSomewhereThere = this.colorPassword.includes(c.color);
           const isRightThere =
             c.color.colorId === this.colorPassword[idx].colorId;
-          console.log("IS AT CORRECT POSITION ?" + isRightThere);
 
           if (isRightThere) {
             this.roundPoints++;
@@ -193,9 +214,25 @@ export default {
           }
         });
       } else {
-        console.log("No password provided!");
+        console.log('No password provided!');
       }
       this.roundCounter++;
+    },
+    getRoundSelectedColorsByRoundId(roundId) {
+      const auxArr = [...this.gameRounds];
+      auxArr.find(arr => arr.roundId === roundId);
+      if (auxArr !== undefined && roundId > 0) {
+        return auxArr.selectedColors;
+      } else {
+        console.log('Game not started yet');
+        return this.colorPasswordGuess;
+      }
+    },
+    filterRounds() {
+      const auxArr = this.gameRounds.filter(round => round.roundId > 0);
+      if (auxArr.length > 0) {
+        return auxArr;
+      }
     }
   }
 };

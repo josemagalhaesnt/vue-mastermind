@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: "GameHeader",
+  name: 'GameHeader',
   props: {
     startIsDisabled: {
       type: Boolean,

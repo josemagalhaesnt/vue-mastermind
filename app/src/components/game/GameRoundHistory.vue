@@ -1,50 +1,77 @@
 <template>
-  <div :key="gameRound" class="card" v-for="gameRound in gameRounds">
-    <div
-      :key="password"
-      v-bind="passwordGuess"
-      v-for="password in passwordGuess"
-      class="GameRound card-content"
-    >
-      <div class="content">
-        <p v-bind="roundCounter">Round {{ roundCounter }}</p>
-        <span :key="password" class="icon has-text-info">
-          <i
-            class="fas fa-info-circle"
-            style="color: password.color.hexColor; fontSize: 16"
-          />
-        </span>
+  <section class="GameRoundHistory">
+    <div class="card">
+      <div class="card-content">
+        <p>Round {{ gameRound.roundId }}</p>
+
+        <ol class="selected-colors">
+          <li>
+            <ColorIcon
+              :colorHex="getColorHex(this.gameRound.selectedColors[0])"
+              :size="50"
+            ></ColorIcon>
+          </li>
+          <li>
+            <ColorIcon
+              :colorHex="getColorHex(this.gameRound.selectedColors[1])"
+              :size="50"
+            ></ColorIcon>
+          </li>
+          <li>
+            <ColorIcon
+              :colorHex="getColorHex(this.gameRound.selectedColors[2])"
+              :size="50"
+            ></ColorIcon>
+          </li>
+          <li>
+            <ColorIcon
+              :colorHex="getColorHex(this.gameRound.selectedColors[3])"
+              :size="50"
+            ></ColorIcon>
+          </li>
+        </ol>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
+import ColorIcon from '../ColorIcon';
+
 export default {
-  name: "GameRoundHistory",
+  name: 'GameRoundHistory',
+  components: {
+    ColorIcon
+  },
   props: {
-    passwordGuess: {
-      type: Array,
-      default: undefined
-    },
-    roundCounter: {
-      type: Number,
+    gameRound: {
+      type: Object,
       required: true
     }
   },
-  watch: {
-    passwordGuess() {
-      if (this.passwordGuess.length > 1) {
-        this.gameRounds.push(() => this.passwordGuess);
+  methods: {
+    getColorHex(colorParam) {
+      if (colorParam !== undefined) {
+        const { hexValue } = colorParam.color;
+        return hexValue;
       }
     }
-  },
-  data() {
-    return {
-      gameRounds: []
-    };
   }
 };
 </script>
 
-<style></style>
+<style>
+.GameRoundHistory {
+  width: 100%;
+  padding: 20px;
+  margin: 40px;
+}
+.selected-colors {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+.selected-colors li {
+  list-style: none;
+}
+</style>

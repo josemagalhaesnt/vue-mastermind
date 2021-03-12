@@ -15,7 +15,7 @@
 <script>
 // import colorConstants from "../../constants/colorConstants";
 export default {
-  name: "ColorSelect",
+  name: 'ColorSelect',
   props: {
     colors: {
       type: Object,
@@ -29,8 +29,8 @@ export default {
   },
   methods: {
     selectColor() {
-      this.$emit("color-select", this.selectedColor.colorId);
-      console.log("Your choice was: " + this.selectedColor.name);
+      this.$emit('color-select', this.selectedColor.colorId);
+      console.log('Your choice was: ' + this.selectedColor.name);
     }
   }
 };

@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import GamingSection from "./components/GamingSection";
+import GamingSection from './components/GamingSection';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     GamingSection
   }
@@ -14,8 +14,8 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Jost&display=swap");
-@import "https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Jost&display=swap');
+@import 'https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css';
 
 :root {
   padding: 0;
