@@ -13,7 +13,6 @@
 </template>
 
 <script>
-// import colorConstants from "../../constants/colorConstants";
 export default {
   name: 'ColorSelect',
   props: {

@@ -7,25 +7,25 @@
         <ol class="selected-colors">
           <li>
             <ColorIcon
-              :colorHex="getColorHex(this.gameRound.selectedColors[0])"
+              :colorHex="getColorHex(this.gameRound.selectedColors[0].color)"
               :size="50"
             ></ColorIcon>
           </li>
           <li>
             <ColorIcon
-              :colorHex="getColorHex(this.gameRound.selectedColors[1])"
+              :colorHex="getColorHex(this.gameRound.selectedColors[1].color)"
               :size="50"
             ></ColorIcon>
           </li>
           <li>
             <ColorIcon
-              :colorHex="getColorHex(this.gameRound.selectedColors[2])"
+              :colorHex="getColorHex(this.gameRound.selectedColors[2].color)"
               :size="50"
             ></ColorIcon>
           </li>
           <li>
             <ColorIcon
-              :colorHex="getColorHex(this.gameRound.selectedColors[3])"
+              :colorHex="getColorHex(this.gameRound.selectedColors[3].color)"
               :size="50"
             ></ColorIcon>
           </li>
@@ -54,6 +54,8 @@ export default {
       if (colorParam !== undefined) {
         const { hexValue } = colorParam.color;
         return hexValue;
+      } else {
+        return 'grey';
       }
     }
   }

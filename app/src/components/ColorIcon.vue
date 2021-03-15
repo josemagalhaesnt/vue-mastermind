@@ -1,9 +1,6 @@
 <template>
   <span class="ColorIcon icon has-text">
-    <i
-      class="fas fa-info-circle"
-      :style="{ color: colorHex, fontSize: size }"
-    />
+    <i class="fas fa-circle" :style="{ color: colorHex, fontSize: size }" />
   </span>
 </template>
 
@@ -13,7 +10,8 @@ export default {
   props: {
     colorHex: {
       type: String,
-      required: true
+      required: true,
+      default: ''
     },
     size: {
       type: Number,
