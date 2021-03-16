@@ -2,30 +2,35 @@
   <section class="GameRoundHistory">
     <div class="card">
       <div class="card-content">
-        <p>Round {{ gameRound.roundId }}</p>
-
-        <ol class="selected-colors">
+        <ol
+          :key="gameRound.roundId"
+          v-for="gameRound in gameRounds"
+          class="selected-colors"
+        >
+          <li>
+            <p>Round {{ gameRound.roundId }}</p>
+          </li>
           <li>
             <ColorIcon
-              :colorHex="getColorHex(this.gameRound.selectedColors[0].color)"
+              :colorHex="getColorHex(gameRound.selectedColors[0])"
               :size="50"
             ></ColorIcon>
           </li>
           <li>
             <ColorIcon
-              :colorHex="getColorHex(this.gameRound.selectedColors[1].color)"
+              :colorHex="getColorHex(gameRound.selectedColors[1])"
               :size="50"
             ></ColorIcon>
           </li>
           <li>
             <ColorIcon
-              :colorHex="getColorHex(this.gameRound.selectedColors[2].color)"
+              :colorHex="getColorHex(gameRound.selectedColors[2])"
               :size="50"
             ></ColorIcon>
           </li>
           <li>
             <ColorIcon
-              :colorHex="getColorHex(this.gameRound.selectedColors[3].color)"
+              :colorHex="getColorHex(gameRound.selectedColors[3])"
               :size="50"
             ></ColorIcon>
           </li>
@@ -43,12 +48,7 @@ export default {
   components: {
     ColorIcon
   },
-  props: {
-    gameRound: {
-      type: Object,
-      required: true
-    }
-  },
+  inject: ['gameRounds'],
   methods: {
     getColorHex(colorParam) {
       if (colorParam !== undefined) {
