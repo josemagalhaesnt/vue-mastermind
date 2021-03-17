@@ -13,7 +13,6 @@
               <ColorSelect
                 :key="selectedColor.id"
                 v-model="selectedColor.color"
-                :colors="colorOptions"
                 @color-select="onColorSelect"
               />
               <div class="icon is-small is-left">
@@ -35,9 +34,9 @@
           <GameRoundHistory />
         </aside>
       </div>
-      <div class="column is-one-quarter">
+      <!-- <div class="column is-one-quarter">
         <GameLogsSidebar v-if="roundStatus.length" :logs="roundStatus" />
-      </div>
+      </div> -->
     </div>
   </section>
 </template>
@@ -49,7 +48,7 @@ import {
 } from '../constants/colorConstants';
 // import { gameDefault } from '../constants/gameConstants';
 import GameHeader from './game/GameHeader';
-import GameLogsSidebar from './game/GameLogsSidebar';
+// import GameLogsSidebar from './game/GameLogsSidebar';
 import ColorIcon from './ColorIcon';
 import ColorSelect from './ColorSelect';
 import GameRoundHistory from './game/GameRoundHistory';
@@ -58,7 +57,7 @@ export default {
   name: 'GamingSection',
   components: {
     GameHeader,
-    GameLogsSidebar,
+    // GameLogsSidebar,
     ColorSelect,
     ColorIcon,
     GameRoundHistory
@@ -93,29 +92,24 @@ export default {
       colorPasswordGuess: [
         {
           id: 0,
-          color: defaultSelectedColors[0].color,
-          isCorrect: false
+          color: defaultSelectedColors[0].color
         },
         {
           id: 1,
-          color: defaultSelectedColors[1].color,
-          isCorrect: false
+          color: defaultSelectedColors[1].color
         },
         {
           id: 2,
-          color: defaultSelectedColors[2].color,
-          isCorrect: false
+          color: defaultSelectedColors[2].color
         },
         {
           id: 3,
-          color: defaultSelectedColors[3].color,
-          isCorrect: false
+          color: defaultSelectedColors[3].color
         }
       ],
       roundCounter: 0,
-      roundPoints: 0,
       gameRounds: [],
-      roundStatus: [],
+
       isAllowedToPlay: true,
       rightAnswer: false
     };
@@ -126,8 +120,8 @@ export default {
       // onResetBtnClick: this.resetGame,
       startIsDisabled: this.hasGameStarted,
       roundCounter: this.roundCounter,
-      roundPoints: this.roundPoints,
-      gameRounds: this.gameRounds
+      gameRounds: this.gameRounds,
+      colors: this.colorOptions
     };
   },
   watch: {
@@ -177,7 +171,7 @@ export default {
       }
       return selectedColor.name;
     },
-    getStatusMessage() {
+    getStatus() {
       const passArray = this.colorPasswordGuess;
 
       passArray.forEach((c, idx) => {
@@ -185,32 +179,26 @@ export default {
         const isRightThere =
           c.color.colorId === this.colorPassword[idx].colorId;
 
+        const status = [];
+
         if (isRightThere) {
-          this.roundPoints++;
-          c.isCorrect = true;
-          this.roundStatus.push({
-            id: this.idGenerator,
-            message: `${c.color.name} is at correct position `
-          });
+          status.push({ index: idx, value: 'black' });
         } else if (isSomewhereThere) {
-          this.roundStatus.push({
-            id: this.idGenerator,
-            message: `There is one or multiple occurences of ${c.color.name} `
-          });
+          status.push({ index: idx, value: 'white' });
         } else {
-          this.roundStatus.push({
-            id: this.idGenerator,
-            message: `${c.color.name} is not there `
-          });
+          status.push({ index: idx, value: '' });
         }
       });
 
-      return this.roundStatus;
+      return status;
     },
     checkPassword() {
+      const selectedColors = this.colorPasswordGuess.map(({ color }) => color);
+      this.roundCounter++;
       this.gameRounds.push({
         roundId: this.roundCounter,
-        selectedColors: this.colorPasswordGuess
+        selectedColors,
+        status: this.getStatus()
       });
 
       if (this.isCorrectPasswordGuess) {
@@ -218,18 +206,14 @@ export default {
         this.isAllowedToPlay = false;
         return true;
       }
-
-      this.getStatusMessage();
-      this.roundCounter++;
       return false;
     }
     /* resetGame() {
       return this({
         colorPassword: gameDefault.colorPassword,
         colorPasswordGuess: gameDefault.colorPasswordGuess,
-        roundStatus: gameDefault.roundStatus,
+        
         roundCounter: gameDefault.roundCounter,
-        roundPoints: gameDefault.roundPoints,
         gameRounds: gameDefault.gameRounds,
         isAllowedToPlay: gameDefault.isAllowedToPlay,
         rightAnswer: gameDefault.rightAnswer

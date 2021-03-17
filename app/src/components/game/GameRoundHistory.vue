@@ -52,7 +52,7 @@ export default {
   methods: {
     getColorHex(colorParam) {
       if (colorParam !== undefined) {
-        const { hexValue } = colorParam.color;
+        const { hexValue } = colorParam;
         return hexValue;
       } else {
         return 'grey';

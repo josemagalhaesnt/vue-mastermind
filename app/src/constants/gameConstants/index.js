@@ -25,9 +25,7 @@ const gameDefault = {
     }
   ],
   roundCounter: 0,
-  roundPoints: 0,
   gameRounds: [],
-  roundStatus: [],
   isAllowedToPlay: true,
   rightAnswer: false
 };

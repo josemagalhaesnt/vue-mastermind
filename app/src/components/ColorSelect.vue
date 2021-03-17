@@ -15,12 +15,7 @@
 <script>
 export default {
   name: 'ColorSelect',
-  props: {
-    colors: {
-      type: Object,
-      required: true
-    }
-  },
+  inject: ['colors'],
   data() {
     return {
       selectedColor: {}

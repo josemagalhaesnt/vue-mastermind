@@ -11,7 +11,6 @@
         </button>
       </div>
       <div class="column">Round: {{ roundCounter }}</div>
-      <div class="column">Points: {{ roundPoints }}</div>
     </nav>
   </header>
 </template>
@@ -19,7 +18,7 @@
 <script>
 export default {
   name: 'GameHeader',
-  inject: ['onStartBtnClick', 'roundCounter', 'roundPoints'],
+  inject: ['onStartBtnClick', 'roundCounter'],
   props: {
     startIsDisabled: {
       type: Boolean,
