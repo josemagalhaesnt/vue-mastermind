@@ -29,9 +29,15 @@ export default {
 </script>
 
 <style>
+.GameHeader {
+  height: 25%;
+}
 .game-controls {
-  background-color: whitesmoke;
-  color: #222;
+  display: flex;
+  justify-content: center;
+  background-color: teal;
+  border-radius: 5px;
+  color: white;
   padding: 10px 0;
 }
 

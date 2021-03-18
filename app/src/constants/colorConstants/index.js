@@ -1,6 +1,6 @@
 const colorConstants = [
-  { colorId: 0, name: 'grey', hexValue: '#676767' },
-  { colorId: 1, name: 'orange', hexValue: '#ffa500' },
+  { colorId: 0, name: 'white', hexValue: '#ccc' },
+  { colorId: 1, name: 'black', hexValue: '#222' },
   { colorId: 2, name: 'red', hexValue: '#d81159' },
   { colorId: 3, name: 'blue', hexValue: '#2274a5' },
   { colorId: 4, name: 'green', hexValue: '#32936f' },
