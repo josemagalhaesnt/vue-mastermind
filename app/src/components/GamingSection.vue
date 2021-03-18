@@ -1,44 +1,41 @@
 <template>
-  <section id="gaming-section" class="GamingSection container is-fullhd">
+  <div class="GamingSection container is-fullhd">
     <GameHeader :startIsDisabled="hasGameStarted" />
-    <div class="GamingSection__content columns">
-      <div class="column is-left">
-        <main v-show="hasGameStarted && isAllowedToPlay" class="GameMain">
-          <div class="control has-icons-left">
-            <div
-              :key="selectedColor"
-              v-for="selectedColor in colorPasswordGuess"
-              class="select is-medium"
-            >
-              <ColorSelect
-                :key="selectedColor.id"
-                v-model="selectedColor.color"
-                @color-select="onColorSelect"
-              />
-              <div class="icon is-small is-left">
-                <ColorIcon :colorHex="selectedColor.color.hexValue" />
-              </div>
-            </div>
-          </div>
 
-          <button
-            type="submit"
-            @click="checkPassword"
-            :disabled="!isAllowedToPlay"
-            class="button is-link is-outlined is-medium"
-          >
-            Finish Round
-          </button>
-        </main>
-        <aside v-if="gameRounds.length" class="columns container">
+    <main v-show="hasGameStarted && isAllowedToPlay" class="GameMain">
+      <div class="control has-icons-left">
+        <div
+          :key="selectedColor"
+          v-for="selectedColor in colorPasswordGuess"
+          class="select is-medium"
+        >
+          <ColorSelect
+            :key="selectedColor.id"
+            v-model="selectedColor.color"
+            @color-select="onColorSelect"
+          />
+          <div class="icon is-small is-left">
+            <ColorIcon :colorHex="selectedColor.color.hexValue" />
+          </div>
+        </div>
+        <button
+          type="submit"
+          @click="checkPassword"
+          :disabled="!isAllowedToPlay"
+          class="button is-primary is-medium"
+        >
+          Finish Round
+        </button>
+      </div>
+    </main>
+    <section class="GamingSection__content">
+      <div class="container">
+        <aside class="GameRounds" v-if="gameRounds.length">
           <GameRoundHistory />
         </aside>
       </div>
-      <!-- <div class="column is-one-quarter">
-        <GameLogsSidebar v-if="roundStatus.length" :logs="roundStatus" />
-      </div> -->
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -48,7 +45,6 @@ import {
 } from '../constants/colorConstants';
 // import { gameDefault } from '../constants/gameConstants';
 import GameHeader from './game/GameHeader';
-// import GameLogsSidebar from './game/GameLogsSidebar';
 import ColorIcon from './ColorIcon';
 import ColorSelect from './ColorSelect';
 import GameRoundHistory from './game/GameRoundHistory';
@@ -57,7 +53,6 @@ export default {
   name: 'GamingSection',
   components: {
     GameHeader,
-    // GameLogsSidebar,
     ColorSelect,
     ColorIcon,
     GameRoundHistory
@@ -81,10 +76,7 @@ export default {
         console.log("You guessed it right, YOU'RE A WINNER BABY");
       }
       return isCorrect;
-    } /* ,
-    filterGameRounds() {
-      return this.gameRounds.filter(round => round.roundId > 0);
-    }, */
+    }
   },
   data() {
     return {
@@ -109,7 +101,6 @@ export default {
       ],
       roundCounter: 0,
       gameRounds: [],
-
       isAllowedToPlay: true,
       rightAnswer: false
     };
@@ -172,14 +163,12 @@ export default {
       return selectedColor.name;
     },
     getStatus() {
-      const passArray = this.colorPasswordGuess;
+      const passArray = this.colorPasswordGuess.map(({ color }) => color);
+      const status = [];
 
       passArray.forEach((c, idx) => {
-        const isSomewhereThere = this.colorPassword.includes(c.color);
-        const isRightThere =
-          c.color.colorId === this.colorPassword[idx].colorId;
-
-        const status = [];
+        const isSomewhereThere = this.colorPassword.includes(c);
+        const isRightThere = c.colorId === this.colorPassword[idx].colorId;
 
         if (isRightThere) {
           status.push({ index: idx, value: 'black' });
@@ -212,7 +201,6 @@ export default {
       return this({
         colorPassword: gameDefault.colorPassword,
         colorPasswordGuess: gameDefault.colorPasswordGuess,
-        
         roundCounter: gameDefault.roundCounter,
         gameRounds: gameDefault.gameRounds,
         isAllowedToPlay: gameDefault.isAllowedToPlay,
@@ -224,14 +212,21 @@ export default {
 </script>
 
 <style>
+.GamingSection {
+  margin: 20px 0;
+  height: 80%;
+}
+
 .GameMain {
+  width: 100%;
   display: flex;
-  margin-top: 50px;
+  flex-flow: row wrap;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .select {
-  margin: 0 15px;
+  margin-right: 25px;
 }
 </style>
